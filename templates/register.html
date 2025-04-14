@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>新規登録</title>
+</head>
+
+<body>
+    <h2>新規ユーザー登録♡</h2>
+    {{if .Error}}<p style="color:red">{{.Error}}</p>{{end}}
+    <form method="POST" action="/register">
+        <input type="text" name="user_id" placeholder="ユーザーID"><br>
+        <input type="text" name="mail" placeholder="メールアドレス"><br>
+        <input type="password" name="password" placeholder="パスワード"><br>
+        <button type="submit">登録しちゃう💘</button>
+    </form>
+</body>
+
+</html>

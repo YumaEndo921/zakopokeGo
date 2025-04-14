@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>捕獲結果</title>
+</head>
+
+<body>
+    {{if .Success}}
+    <h2>やったー！ポケモン捕まえたよ！🎉</h2>
+    <p>ポケモンID：{{.PokemonID}}</p>
+    {{else}}
+    <h2>ざんねん！逃げられちゃった😭</h2>
+    {{end}}
+    <a href="/home">ホームに戻る🌈</a>
+</body>
+
+</html>

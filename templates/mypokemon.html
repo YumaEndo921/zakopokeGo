@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>わたしのポケモン図鑑</title>
+</head>
+
+<body>
+    <h2>捕まえたポケモンたち✨</h2>
+    {{ if .PokemonList }}
+    <ul>
+        {{ range .PokemonList }}
+        <li style="margin-bottom:20px">
+            <h3>#{{ .ID }} {{ .Name }}</h3>
+            <img src="{{ .Image }}" alt="{{ .Name }}">
+            <p>タイプ: {{ range .Types }}<span>{{ . }} </span>{{ end }}</p>
+        </li>
+        {{ end }}
+    </ul>
+    {{ else }}
+    <p>まだポケモンを捕まえてないみたい🥺 探索してみよ〜！</p>
+    {{ end }}
+    <a href="/home">ホームに戻る🌀</a>
+</body>
+
+</html>

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>ポケモン発見！</title>
+</head>
+
+<body>
+    <h2>じゃじゃーん！発見したポケモン！</h2>
+    <p>名前：{{.Pokemon.Name}}</p>
+    <img src="{{.Pokemon.Sprites.FrontDefault}}" alt="ポケモン画像"><br>
+    <form method="POST" action="/catch">
+        <input type="hidden" name="poke_id" value="{{.Pokemon.ID}}">
+        <button type="submit">捕まえる❤️‍🔥</button>
+    </form>
+    <form method="POST" action="/run">
+        <button type="submit">逃げる💨</button>
+    </form>
+</body>
+
+</html>

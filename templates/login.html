@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>ログイン | ポケキャッチャー</title>
+</head>
+
+<body>
+    <h1>ログイン画面だよっ！</h1>
+    {{if .Error}}<p style="color:red">{{.Error}}</p>{{end}}
+    <form method="POST" action="/login">
+        メール：<input type="email" name="mail" /><br>
+        パスワード：<input type="password" name="password" /><br>
+        <button type="submit">ログインする💥</button>
+    </form>
+    <a href="/register">新規登録はこちら💖</a>
+</body>
+
+</html>
