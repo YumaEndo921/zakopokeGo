@@ -7,20 +7,24 @@
 
 <body>
     <h2>捕まえたポケモンたち✨</h2>
+
     {{ if .PokemonList }}
-    <ul>
+    <div style="display: flex; flex-wrap: wrap; gap: 20px;">
         {{ range .PokemonList }}
-        <li style="margin-bottom:20px">
+        <div
+            style="width: 200px; border: 1px solid #ccc; padding: 10px; border-radius: 10px; text-align: center; background-color: #fefefe; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
             <h3>#{{ .ID }} {{ .Name }}</h3>
-            <img src="{{ .Image }}" alt="{{ .Name }}">
+            <img src="{{ .Image }}" alt="{{ .Name }}" style="width: 100px; height: 100px;">
             <p>タイプ: {{ range .Types }}<span>{{ . }} </span>{{ end }}</p>
-        </li>
+        </div>
         {{ end }}
-    </ul>
+    </div>
     {{ else }}
     <p>まだポケモンを捕まえてないみたい🥺 探索してみよ〜！</p>
     {{ end }}
-    <a href="/home">ホームに戻る🌀</a>
+
+    <a href="/home" style="display:block; margin-top: 30px;">ホームに戻る🌀</a>
 </body>
+
 
 </html>
