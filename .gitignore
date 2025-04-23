@@ -1,2 +1,2 @@
-# db ファイルはgit管理しない
-*.db
+# SQLite DB
+pokeapp.db
