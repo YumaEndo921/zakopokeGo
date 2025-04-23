@@ -53,5 +53,5 @@ func Register(c *gin.Context) {
 	}
 	db.DB.Create(&user)
 
-	c.Redirect(http.StatusSeeOther, "/login")
+	c.Redirect(http.StatusSeeOther, "/home")
 }

@@ -14,24 +14,37 @@ import (
 
 func Catch(c *gin.Context) {
 	session := sessions.Default(c)
-	userID := session.Get("user_id").(uint)
-	pokeID, _ := strconv.Atoi(c.PostForm("poke_id"))
+	userID := session.Get("user_id")
+	if userID == nil {
+		c.Redirect(http.StatusSeeOther, "/login")
+		return
+	}
+
+	pokemonIDStr := c.PostForm("poke_id")
+	pokemonID, err := strconv.Atoi(pokemonIDStr)
+	if err != nil {
+		c.HTML(http.StatusBadRequest, "home.html", gin.H{"Error": "ポケモンIDが不正だよ〜💦"})
+		return
+	}
 
 	rand.Seed(time.Now().UnixNano())
-	if rand.Intn(100) < 60 { // 60%で捕獲成功だYO〜★
-		db.DB.Create(&models.OwnedPokemon{
-			UserID:    uint(userID),
-			PokemonNo: pokeID,
-		})
+	successRate := 70 // 成功率70%
+	roll := rand.Intn(100)
 
-		c.HTML(http.StatusOK, "catch_result.html", gin.H{
-			"Success":   true,
-			"PokemonID": pokeID,
+	if roll < successRate {
+		// 成功時：DB登録
+		caught := models.OwnedPokemon{
+			UserID:    userID.(uint),
+			PokemonNo: pokemonID,
+		}
+		db.DB.Create(&caught)
+		c.HTML(http.StatusOK, "catch_success.html", gin.H{
+			"PokemonID": pokemonID,
 		})
 	} else {
-		c.HTML(http.StatusOK, "catch_result.html", gin.H{
-			"Success":   false,
-			"PokemonID": pokeID,
+		// 失敗時
+		c.HTML(http.StatusOK, "catch_fail.html", gin.H{
+			"PokemonID": pokemonID,
 		})
 	}
 }

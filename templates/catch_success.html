@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>捕獲成功🎉</title>
+    <style>
+        .ball {
+            width: 100px;
+            animation: shake 1s ease-in-out 3;
+        }
+
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            20% {
+                transform: translateX(-10px);
+            }
+
+            40% {
+                transform: translateX(10px);
+            }
+
+            60% {
+                transform: translateX(-5px);
+            }
+
+            80% {
+                transform: translateX(5px);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <h2>捕まえたッ！🎉</h2>
+    <img class="ball" src="/static/pokeball.png" alt="モンスターボール">
+    <p>ポケモン#{{ .PokemonID }} をゲットしたよ〜💖</p>
+    <a href="/home">ホームに戻る</a> | <a href="/mypokemon">図鑑を見る</a>
+</body>
+
+</html>
