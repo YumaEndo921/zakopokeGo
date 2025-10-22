@@ -51,7 +51,15 @@ func Register(c *gin.Context) {
 		Password: password, // 本番ならハッシュしようね！
 		UserID:   userID,
 	}
-	db.DB.Create(&user)
+	if err := db.DB.Create(&user).Error; err != nil {
+		c.HTML(http.StatusInternalServerError, "register.html", gin.H{"Error": "登録に失敗しました"})
+		return
+	}
+
+	// 登録後に自動でログイン（セッションに user_id を保存）
+	session := sessions.Default(c)
+	session.Set("user_id", user.ID)
+	session.Save()
 
 	c.Redirect(http.StatusSeeOther, "/home")
 }
