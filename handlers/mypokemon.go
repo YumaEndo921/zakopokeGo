@@ -13,14 +13,14 @@ import (
 
 func MyPokemon(c *gin.Context) {
 	session := sessions.Default(c)
-	userID := session.Get("user_id")
-	if userID == nil {
+	UserId := session.Get("user_id")
+	if UserId == nil {
 		c.Redirect(http.StatusSeeOther, "/login")
 		return
 	}
 
 	var caught []models.OwnedPokemon
-	if err := db.DB.Where("user_id = ?", userID).Find(&caught).Error; err != nil {
+	if err := db.DB.Where("user_id = ?", UserId).Find(&caught).Error; err != nil {
 		c.HTML(http.StatusInternalServerError, "home.html", gin.H{"Error": "ポケモン取得に失敗したよ〜💦"})
 		return
 	}
