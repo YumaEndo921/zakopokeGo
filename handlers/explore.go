@@ -35,7 +35,7 @@ func Explore(c *gin.Context) {
 		return
 	}
 
-	// sessionからユーザーID取得（ダミーで userID 1 を使ってるよ）
+	// sessionからユーザーID取得（ダミーで UserId 1 を使ってるよ）
 	c.HTML(http.StatusOK, "explore_result.html", gin.H{
 		"Pokemon": data,
 	})

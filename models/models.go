@@ -1,14 +1,14 @@
 package models
 
 type User struct {
-	ID       uint   `gorm:"primaryKey"`
-	UserID   string `gorm:"unique"`
+	Id       uint   `gorm:"primaryKey"`
+	UserId   string `gorm:"unique"`
 	Mail     string `gorm:"unique"`
 	Password string
 }
 
 type OwnedPokemon struct {
-	ID        uint `gorm:"primaryKey"`
-	UserID    uint
+	Id        uint `gorm:"primaryKey"`
+	UserId    uint
 	PokemonNo int
 }

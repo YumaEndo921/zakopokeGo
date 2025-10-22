@@ -14,8 +14,8 @@ import (
 
 func Catch(c *gin.Context) {
 	session := sessions.Default(c)
-	userID := session.Get("user_id")
-	if userID == nil {
+	UserId := session.Get("user_id")
+	if UserId == nil {
 		c.Redirect(http.StatusSeeOther, "/login")
 		return
 	}
@@ -34,7 +34,7 @@ func Catch(c *gin.Context) {
 	if roll < successRate {
 		// 成功時：DB登録
 		caught := models.OwnedPokemon{
-			UserID:    userID.(uint),
+			UserId:    UserId.(uint),
 			PokemonNo: pokemonID,
 		}
 		db.DB.Create(&caught)
