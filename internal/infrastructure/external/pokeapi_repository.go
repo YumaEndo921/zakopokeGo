@@ -53,11 +53,21 @@ func (r *pokeAPIRepository) GetPokemonMetadata(id int) (*repository.PokemonMetad
 			} `json:"names"`
 		}
 		if err := json.NewDecoder(speciesResp.Body).Decode(&speciesData); err == nil {
+			foundJaHrkt := false
+			foundJa := false
 			for _, n := range speciesData.Names {
 				if n.Language.Name == "ja-Hrkt" {
 					japaneseName = n.Name
+					foundJaHrkt = true
 					break
 				}
+				if n.Language.Name == "ja" {
+					japaneseName = n.Name
+					foundJa = true
+				}
+			}
+			if !foundJaHrkt && foundJa {
+				// ja-Hrkt がなく ja がある場合、ja の名前がすでにセットされている
 			}
 		}
 	}
@@ -80,15 +90,20 @@ func (r *pokeAPIRepository) GetPokemonMetadata(id int) (*repository.PokemonMetad
 			} `json:"names"`
 		}
 		if err := json.NewDecoder(typeResp.Body).Decode(&typeData); err == nil {
-			found := false
+			var typeName string
 			for _, n := range typeData.Names {
 				if n.Language.Name == "ja-Hrkt" {
-					types = append(types, n.Name)
-					found = true
+					typeName = n.Name
 					break
 				}
+				if n.Language.Name == "ja" {
+					typeName = n.Name
+				}
 			}
-			if !found {
+
+			if typeName != "" {
+				types = append(types, typeName)
+			} else {
 				types = append(types, t.Type.Name)
 			}
 		} else {
