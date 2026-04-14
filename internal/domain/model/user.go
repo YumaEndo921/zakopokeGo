@@ -1,5 +1,11 @@
 package model
 
+import "errors"
+
+var (
+	ErrUnauthorized = errors.New("unauthorized access")
+)
+
 type User struct {
 	ID       uint
 	UserID   string

@@ -74,7 +74,7 @@ func (h *PokemonHandler) Catch(c *gin.Context) {
 	}
 }
 
-func (h *PokemonHandler) MyPokemon(c *gin.Context) {
+func (h *PokemonHandler) Box(c *gin.Context) {
 	session := sessions.Default(c)
 	userID := session.Get("user_id")
 	if userID == nil {
@@ -88,16 +88,8 @@ func (h *PokemonHandler) MyPokemon(c *gin.Context) {
 		return
 	}
 
-	// 必要に応じてテンプレートの期待に合わせて変換
-	// テンプレートは構造体のフィールドを期待している可能性が高い。repository.PokemonMetadataのキーを合わせるか、テンプレートを調整する。
-	// repository.PokemonMetadataはName(英語), JapaneseName(日本語), Image, Typesを持つ。
-	// 以前のコードはID, Name, Types, Imageを持つ"PokemonList"を使用していた。
-	// Metadataは"JapaneseName"を持っているので、これをテンプレート用に"Name"にマッピングするか、テンプレートを更新する。
-	// テンプレートは.Name, .Image, .Types, .IDを使用していると仮定する。
-	// 表示用にうまくレンダリングできる構造体を渡す。
-
 	type DisplayPokemon struct {
-		ID    int
+		ID    uint
 		Name  string
 		Image string
 		Types []string
@@ -112,11 +104,34 @@ func (h *PokemonHandler) MyPokemon(c *gin.Context) {
 		})
 	}
 
-	c.HTML(http.StatusOK, "mypokemon.html", gin.H{
+	c.HTML(http.StatusOK, "box.html", gin.H{
 		"PokemonList": displayList,
 	})
 }
 
 func (h *PokemonHandler) Run(c *gin.Context) {
 	c.Redirect(http.StatusSeeOther, "/home")
+}
+
+func (h *PokemonHandler) Release(c *gin.Context) {
+	session := sessions.Default(c)
+	userID := session.Get("user_id")
+	if userID == nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		return
+	}
+
+	idStr := c.Param("id")
+	capturedID, _ := strconv.ParseUint(idStr, 10, 64)
+
+	name, err := h.pokemonUC.ReleasePokemon(userID.(uint), uint(capturedID))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "お別れに失敗しました"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"status":  "success",
+		"message": "バイバイ、" + name + "！ 元気でね！",
+	})
 }

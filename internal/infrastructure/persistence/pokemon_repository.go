@@ -40,3 +40,17 @@ func (r *pokemonRepository) CountByUserID(userID uint) (int64, error) {
 	result := DB.Model(&Pokemon{}).Where("user_id = ?", userID).Count(&count)
 	return count, result.Error
 }
+
+func (r *pokemonRepository) FindByID(id uint) (*model.Pokemon, error) {
+	var dbPokemon Pokemon
+	result := DB.First(&dbPokemon, id)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	return dbPokemon.ToDomain(), nil
+}
+
+func (r *pokemonRepository) Delete(id uint) error {
+	result := DB.Delete(&Pokemon{}, id)
+	return result.Error
+}

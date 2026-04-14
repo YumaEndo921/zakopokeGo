@@ -53,7 +53,8 @@ func main() {
 	r.POST("/explore", pokemonHandler.Explore) // 元の実装に合わせてGET/POST両方をサポート
 
 	r.POST("/catch", pokemonHandler.Catch)
-	r.GET("/mypokemon", pokemonHandler.MyPokemon)
+	r.GET("/box", pokemonHandler.Box)
+	r.POST("/box/release/:id", pokemonHandler.Release)
 	r.POST("/run", pokemonHandler.Run)
 
 	log.Println("Server starting on :8080")

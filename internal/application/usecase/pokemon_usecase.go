@@ -7,11 +7,21 @@ import (
 	"zakopokeGo/internal/domain/repository"
 )
 
+type CapturedPokemonDetail struct {
+	ID           uint
+	PokemonNo    int
+	Name         string
+	JapaneseName string
+	Image        string
+	Types        []string
+}
+
 type PokemonUseCase interface {
 	Explore() (*repository.PokemonMetadata, error)
 	Catch(userID uint, pokemonNo int) (bool, error)
-	GetMyPokemons(userID uint) ([]*repository.PokemonMetadata, error)
+	GetMyPokemons(userID uint) ([]*CapturedPokemonDetail, error)
 	GetCatchCount(userID uint) (int64, error)
+	ReleasePokemon(userID uint, capturedID uint) (string, error)
 }
 
 type pokemonUseCase struct {
@@ -47,23 +57,56 @@ func (u *pokemonUseCase) Catch(userID uint, pokemonNo int) (bool, error) {
 	return false, nil
 }
 
-func (u *pokemonUseCase) GetMyPokemons(userID uint) ([]*repository.PokemonMetadata, error) {
+func (u *pokemonUseCase) GetMyPokemons(userID uint) ([]*CapturedPokemonDetail, error) {
 	pokemons, err := u.pokemonRepo.FindByUserID(userID)
 	if err != nil {
 		return nil, err
 	}
 
-	var details []*repository.PokemonMetadata
+	var details []*CapturedPokemonDetail
 	for _, p := range pokemons {
 		meta, err := u.metadataRepo.GetPokemonMetadata(p.PokemonNo)
 		if err != nil {
-			continue // メタデータの取得に失敗した場合はスキップ、またはエラーハンドリング
+			continue
 		}
-		details = append(details, meta)
+		details = append(details, &CapturedPokemonDetail{
+			ID:           p.ID,
+			PokemonNo:    p.PokemonNo,
+			Name:         meta.Name,
+			JapaneseName: meta.JapaneseName,
+			Image:        meta.Image,
+			Types:        meta.Types,
+		})
 	}
 	return details, nil
 }
 
 func (u *pokemonUseCase) GetCatchCount(userID uint) (int64, error) {
 	return u.pokemonRepo.CountByUserID(userID)
+}
+
+func (u *pokemonUseCase) ReleasePokemon(userID uint, capturedID uint) (string, error) {
+	// 1. 所有権の確認
+	pokemon, err := u.pokemonRepo.FindByID(capturedID)
+	if err != nil {
+		return "", err
+	}
+	if pokemon.UserID != userID {
+		return "", model.ErrUnauthorized // 適当なエラー
+	}
+
+	// 2. ポケモン名の取得（演出用）
+	meta, err := u.metadataRepo.GetPokemonMetadata(pokemon.PokemonNo)
+	name := "ポケモン"
+	if err == nil {
+		name = meta.JapaneseName
+	}
+
+	// 3. 削除
+	err = u.pokemonRepo.Delete(capturedID)
+	if err != nil {
+		return "", err
+	}
+
+	return name, nil
 }

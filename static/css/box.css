@@ -1,0 +1,146 @@
+:root {
+    --primary-pink: #ff69b4;
+    --pastel-pink: #ffd1dc;
+    --pastel-blue: #b0e0e6;
+    --grass-green: #e2f0d9;
+    --card-bg: rgba(255, 255, 255, 0.9);
+    --shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+body {
+    background: linear-gradient(135deg, var(--pastel-pink) 0%, var(--pastel-blue) 100%);
+    min-height: 100vh;
+    font-family: 'Outfit', 'Roboto', sans-serif;
+    margin: 0;
+    padding: 20px;
+    color: #333;
+}
+
+h2 {
+    text-align: center;
+    color: #fff;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+}
+
+.box-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.pokemon-card {
+    width: 200px;
+    background: var(--card-bg);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 15px;
+    text-align: center;
+    box-shadow: var(--shadow);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.pokemon-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+}
+
+.pokemon-card h3 {
+    margin: 10px 0;
+    font-size: 1.2rem;
+    color: #444;
+}
+
+.pokemon-card img {
+    width: 120px;
+    height: 120px;
+    object-fit: contain;
+    filter: drop-shadow(0 5px 15px rgba(0,0,0,0.1));
+}
+
+.pokemon-card .types {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+    margin-top: 5px;
+}
+
+.type-tag {
+    background: #f0f0f0;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 0.8rem;
+    color: #666;
+}
+
+.release-btn {
+    margin-top: 15px;
+    background: linear-gradient(to right, #ff4e50, #f9d423);
+    border: none;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 15px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: filter 0.3s ease;
+}
+
+.release-btn:hover {
+    filter: brightness(1.1);
+}
+
+/* 逃がす際のアニメーション */
+@keyframes release-flight {
+    0% {
+        transform: scale(1) translateY(0);
+        opacity: 1;
+        filter: blur(0);
+    }
+    100% {
+        transform: scale(0.2) translateY(-300px);
+        opacity: 0;
+        filter: blur(10px);
+    }
+}
+
+.releasing {
+    pointer-events: none;
+    animation: release-flight 1.5s ease-in forwards;
+}
+
+#farewell-message {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 20px 40px;
+    border-radius: 30px;
+    font-size: 1.5rem;
+    display: none;
+    z-index: 1000;
+    backdrop-filter: blur(5px);
+    animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translate(-50%, -60%); }
+    to { opacity: 1; transform: translate(-50%, -50%); }
+}
+
+.back-link {
+    display: block;
+    text-align: center;
+    margin-top: 40px;
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ポケモンボックス</title>
+    <link rel="stylesheet" href="/static/css/box.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <h2>ポケモンボックス ✨</h2>
+
+    <div id="farewell-message"></div>
+
+    {{ if .PokemonList }}
+    <div class="box-container">
+        {{ range .PokemonList }}
+        <div class="pokemon-card" id="pokemon-{{ .ID }}">
+            <h3>#{{ .ID }} {{ .Name }}</h3>
+            <img src="{{ .Image }}" alt="{{ .Name }}">
+            <div class="types">
+                {{ range .Types }}
+                <span class="type-tag">{{ . }}</span>
+                {{ end }}
+            </div>
+            <button class="release-btn" onclick="releasePokemon('{{ .ID }}', '{{ .Name }}')">
+                逃がす 👋
+            </button>
+        </div>
+        {{ end }}
+    </div>
+    {{ else }}
+    <div style="text-align: center; color: white;">
+        <p style="font-size: 1.5rem;">まだポケモンを捕まえていないみたい🥺</p>
+        <p>探索してポケモンをゲットしよ〜！💖</p>
+    </div>
+    {{ end }}
+
+    <a href="/home" class="back-link">ホームに戻る 🏠</a>
+
+    <script src="/static/js/box.js"></script>
+</body>
+
+</html>
