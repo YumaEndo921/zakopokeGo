@@ -25,9 +25,14 @@
                 <span class="type-tag">{{ . }}</span>
                 {{ end }}
             </div>
-            <button class="release-btn" onclick="releasePokemon('{{ .ID }}', '{{ .Name }}')">
-                逃がす 👋
-            </button>
+            <div class="card-actions">
+                <a href="/battle?my_pokemon_id={{ .ID }}" class="battle-btn">
+                    バトル！ ⚔️
+                </a>
+                <button class="release-btn" onclick="releasePokemon('{{ .ID }}', '{{ .Name }}')">
+                    逃がす 👋
+                </button>
+            </div>
         </div>
         {{ end }}
     </div>

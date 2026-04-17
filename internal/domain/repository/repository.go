@@ -12,6 +12,7 @@ type PokemonRepository interface {
 	Create(pokemon *model.Pokemon) error
 	FindByUserID(userID uint) ([]*model.Pokemon, error)
 	FindByID(id uint) (*model.Pokemon, error)
+	Save(pokemon *model.Pokemon) error
 	Delete(id uint) error
 	CountByUserID(userID uint) (int64, error)
 }

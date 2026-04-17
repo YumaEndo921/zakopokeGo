@@ -54,3 +54,9 @@ func (r *pokemonRepository) Delete(id uint) error {
 	result := DB.Delete(&Pokemon{}, id)
 	return result.Error
 }
+
+func (r *pokemonRepository) Save(pokemon *model.Pokemon) error {
+	dbPokemon := FromDomainPokemon(pokemon)
+	result := DB.Save(dbPokemon)
+	return result.Error
+}

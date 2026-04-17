@@ -20,6 +20,17 @@ type Pokemon struct {
 	ID        uint `gorm:"primaryKey"`
 	UserID    uint
 	PokemonNo int
+	Level     int
+	Exp       int
+	MaxHP     int
+	CurrentHP int
+	Attack    int
+	Defense   int
+	MoveName  string
+	MoveType  string
+	MovePower int
+	Type1     string
+	Type2     string
 }
 
 func (u *User) ToDomain() *model.User {
@@ -45,6 +56,17 @@ func (p *Pokemon) ToDomain() *model.Pokemon {
 		ID:        p.ID,
 		UserID:    p.UserID,
 		PokemonNo: p.PokemonNo,
+		Level:     p.Level,
+		Exp:       p.Exp,
+		MaxHP:     p.MaxHP,
+		CurrentHP: p.CurrentHP,
+		Attack:    p.Attack,
+		Defense:   p.Defense,
+		MoveName:  p.MoveName,
+		MoveType:  p.MoveType,
+		MovePower: p.MovePower,
+		Type1:     p.Type1,
+		Type2:     p.Type2,
 	}
 }
 
@@ -53,6 +75,17 @@ func FromDomainPokemon(p *model.Pokemon) *Pokemon {
 		ID:        p.ID,
 		UserID:    p.UserID,
 		PokemonNo: p.PokemonNo,
+		Level:     p.Level,
+		Exp:       p.Exp,
+		MaxHP:     p.MaxHP,
+		CurrentHP: p.CurrentHP,
+		Attack:    p.Attack,
+		Defense:   p.Defense,
+		MoveName:  p.MoveName,
+		MoveType:  p.MoveType,
+		MovePower: p.MovePower,
+		Type1:     p.Type1,
+		Type2:     p.Type2,
 	}
 }
 

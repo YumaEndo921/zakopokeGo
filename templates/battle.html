@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>バトル！ - zakopokeGo</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <style>
+        .battle-container {
+            max-width: 500px;
+            margin: 20px auto;
+            background: #f0f0f0;
+            border: 4px solid #333;
+            border-radius: 12px;
+            padding: 20px;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .pokemon-stage {
+            height: 300px;
+            position: relative;
+            background: linear-gradient(to bottom, #87CEEB 60%, #90EE90 60%);
+            border: 2px solid #aaa;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        .enemy-side {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            text-align: right;
+        }
+        .player-side {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+        }
+        .hp-bar-container {
+            width: 150px;
+            height: 12px;
+            background: #eee;
+            border: 2px solid #333;
+            border-radius: 6px;
+            margin: 5px 0;
+        }
+        .hp-bar-fill {
+            height: 100%;
+            background: #4caf50;
+            transition: width 0.5s ease;
+        }
+        .pokemon-img {
+            width: 120px;
+            image-rendering: pixelated;
+        }
+        .enemy-img {
+            position: absolute;
+            top: 30px;
+            left: 50px;
+        }
+        .player-img {
+            position: absolute;
+            bottom: 30px;
+            right: 50px;
+        }
+        .battle-log {
+            height: 100px;
+            background: #fff;
+            border: 3px solid #333;
+            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 20px;
+            overflow-y: auto;
+            font-size: 14px;
+        }
+        .battle-controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        .btn-battle {
+            padding: 15px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            border: none;
+            transition: transform 0.1s;
+        }
+        .btn-attack { background: #ff5252; color: white; }
+        .btn-run { background: #9e9e9e; color: white; }
+        .btn-battle:active { transform: scale(0.95); }
+        .finished-actions {
+            text-align: center;
+        }
+        .leveled-up {
+            color: #e91e63;
+            font-weight: bold;
+            animation: pulse 1s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+    <div class="battle-container">
+        <div class="pokemon-stage">
+            <!-- 敵側 -->
+            <div class="enemy-side">
+                <strong>Lv.{{ .Result.EnemyPokemon.Level }} {{ .Result.EnemyName }}</strong>
+                <div class="hp-bar-container">
+                    <div class="hp-bar-fill" style="width: {{ .Result.EnemyHPPercent }}%;"></div>
+                </div>
+                <div>HP: {{ .Result.EnemyPokemon.CurrentHP }}/{{ .Result.EnemyPokemon.MaxHP }}</div>
+            </div>
+            <img class="pokemon-img enemy-img" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/{{ .Result.EnemyPokemon.PokemonNo }}.png" alt="enemy">
+
+            <!-- プレイヤー側 -->
+            <div class="player-side">
+                <strong>Lv.{{ .Result.MyPokemon.Level }} {{ .Result.MyName }}</strong>
+                <div class="hp-bar-container">
+                    <div class="hp-bar-fill" style="width: {{ .Result.MyHPPercent }}%;"></div>
+                </div>
+                <div>HP: {{ .Result.MyPokemon.CurrentHP }}/{{ .Result.MyPokemon.MaxHP }}</div>
+            </div>
+            <img class="pokemon-img player-img" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/{{ .Result.MyPokemon.PokemonNo }}.png" alt="player">
+        </div>
+
+        <div class="battle-log">
+            {{ range .Result.Logs }}
+                <p>> {{ . }}</p>
+            {{ end }}
+        </div>
+
+        {{ if .Result.IsFinished }}
+            <div class="finished-actions">
+                <a href="/box" class="btn btn-battle btn-run">ボックスへ戻る</a>
+            </div>
+        {{ else }}
+            <form action="/battle/turn" method="post" class="battle-controls">
+                <input type="hidden" name="my_pokemon_id" value="{{ .Result.MyPokemon.ID }}">
+                <input type="hidden" name="my_name" value="{{ .Result.MyName }}">
+                <input type="hidden" name="enemy_name" value="{{ .Result.EnemyName }}">
+                <input type="hidden" name="enemy_no" value="{{ .Result.EnemyPokemon.PokemonNo }}">
+                <input type="hidden" name="enemy_hp" value="{{ .Result.EnemyPokemon.CurrentHP }}">
+                <input type="hidden" name="enemy_max_hp" value="{{ .Result.EnemyPokemon.MaxHP }}">
+                <input type="hidden" name="enemy_atk" value="{{ .Result.EnemyPokemon.Attack }}">
+                <input type="hidden" name="enemy_def" value="{{ .Result.EnemyPokemon.Defense }}">
+                <input type="hidden" name="enemy_move_name" value="{{ .Result.EnemyPokemon.MoveName }}">
+                <input type="hidden" name="enemy_move_type" value="{{ .Result.EnemyPokemon.MoveType }}">
+                <input type="hidden" name="enemy_move_power" value="{{ .Result.EnemyPokemon.MovePower }}">
+                <input type="hidden" name="enemy_type1" value="{{ .Result.EnemyPokemon.Type1 }}">
+                <input type="hidden" name="enemy_type2" value="{{ .Result.EnemyPokemon.Type2 }}">
+
+                <button type="submit" name="action" value="attack" class="btn-battle btn-attack">
+                    {{ .Result.MyPokemon.MoveName }}
+                </button>
+                <a href="/box" class="btn-battle btn-run" style="text-align: center; text-decoration: none; display: flex; align-items: center; justify-content: center;">
+                    にげる
+                </a>
+            </form>
+        {{ end }}
+    </div>
+</body>
+</html>

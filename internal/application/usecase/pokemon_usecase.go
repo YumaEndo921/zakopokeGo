@@ -47,8 +47,35 @@ func (u *pokemonUseCase) Catch(userID uint, pokemonNo int) (bool, error) {
 	success := rand.Intn(2) == 0 // 50% の確率
 
 	if success {
+		meta, err := u.metadataRepo.GetPokemonMetadata(pokemonNo)
+		if err != nil {
+			return false, err
+		}
+
 		newPokemon := model.NewPokemon(userID, pokemonNo)
-		err := u.pokemonRepo.Create(newPokemon)
+		// ステータスの設定 (PokeAPIの形式に合わせてマッピング)
+		// hp, attack, defense
+		newPokemon.MaxHP = meta.Stats["hp"]
+		newPokemon.CurrentHP = newPokemon.MaxHP
+		newPokemon.Attack = meta.Stats["attack"]
+		newPokemon.Defense = meta.Stats["defense"]
+
+		// タイプの共通化
+		if len(meta.Types) > 0 {
+			newPokemon.Type1 = meta.Types[0]
+			if len(meta.Types) > 1 {
+				newPokemon.Type2 = meta.Types[1]
+			}
+		}
+
+		// 技の設定 (metadataRepo でランダムに1つ選ばれている想定)
+		if len(meta.Moves) > 0 {
+			newPokemon.MoveName = meta.Moves[0].Name
+			newPokemon.MoveType = meta.Moves[0].Type
+			newPokemon.MovePower = meta.Moves[0].Power
+		}
+
+		err = u.pokemonRepo.Create(newPokemon)
 		if err != nil {
 			return false, err
 		}
