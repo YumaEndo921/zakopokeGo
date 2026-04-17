@@ -56,6 +56,7 @@ func (h *BattleHandler) ExecuteTurn(c *gin.Context) {
 
 	// 敵の状態を隠しフィールドから復元
 	enemyNo, _ := strconv.Atoi(c.PostForm("enemy_no"))
+	enemyLevel, _ := strconv.Atoi(c.PostForm("enemy_level"))
 	enemyHP, _ := strconv.Atoi(c.PostForm("enemy_hp"))
 	enemyMaxHP, _ := strconv.Atoi(c.PostForm("enemy_max_hp"))
 	enemyAtk, _ := strconv.Atoi(c.PostForm("enemy_atk"))
@@ -68,7 +69,7 @@ func (h *BattleHandler) ExecuteTurn(c *gin.Context) {
 
 	result, err := h.battleUseCase.ExecuteTurn(
 		userID.(uint), uint(myPokemonID), action, myName, enemyName,
-		enemyNo, enemyHP, enemyMaxHP, enemyAtk, enemyDef,
+		enemyNo, enemyLevel, enemyHP, enemyMaxHP, enemyAtk, enemyDef,
 		enemyMoveName, enemyMoveType, enemyMovePower, enemyType1, enemyType2,
 	)
 	if err != nil {

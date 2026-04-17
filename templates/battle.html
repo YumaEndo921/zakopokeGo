@@ -26,13 +26,14 @@
         .enemy-side {
             position: absolute;
             top: 20px;
-            right: 20px;
-            text-align: right;
+            left: 20px;
+            text-align: left;
         }
         .player-side {
             position: absolute;
             bottom: 20px;
-            left: 20px;
+            right: 20px;
+            text-align: right;
         }
         .hp-bar-container {
             width: 150px;
@@ -54,12 +55,12 @@
         .enemy-img {
             position: absolute;
             top: 30px;
-            left: 50px;
+            right: 50px;
         }
         .player-img {
             position: absolute;
             bottom: 30px;
-            right: 50px;
+            left: 50px;
         }
         .battle-log {
             height: 100px;
@@ -134,8 +135,9 @@
         </div>
 
         {{ if .Result.IsFinished }}
-            <div class="finished-actions">
-                <a href="/box" class="btn btn-battle btn-run">ボックスへ戻る</a>
+            <div class="finished-actions" style="display: flex; flex-direction: column; gap: 10px;">
+                <a href="/battle?my_pokemon_id={{ .Result.MyPokemon.ID }}" class="btn btn-battle btn-attack" style="text-decoration: none;">もう一度戦う！</a>
+                <a href="/box" class="btn btn-battle btn-run" style="text-decoration: none;">ボックスへ戻る</a>
             </div>
         {{ else }}
             <form action="/battle/turn" method="post" class="battle-controls">
@@ -143,6 +145,7 @@
                 <input type="hidden" name="my_name" value="{{ .Result.MyName }}">
                 <input type="hidden" name="enemy_name" value="{{ .Result.EnemyName }}">
                 <input type="hidden" name="enemy_no" value="{{ .Result.EnemyPokemon.PokemonNo }}">
+                <input type="hidden" name="enemy_level" value="{{ .Result.EnemyPokemon.Level }}">
                 <input type="hidden" name="enemy_hp" value="{{ .Result.EnemyPokemon.CurrentHP }}">
                 <input type="hidden" name="enemy_max_hp" value="{{ .Result.EnemyPokemon.MaxHP }}">
                 <input type="hidden" name="enemy_atk" value="{{ .Result.EnemyPokemon.Attack }}">

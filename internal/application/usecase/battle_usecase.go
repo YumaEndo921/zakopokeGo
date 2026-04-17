@@ -24,7 +24,7 @@ type BattleResult struct {
 
 type BattleUseCase interface {
 	StartBattle(userID uint, myPokemonID uint) (*BattleResult, error)
-	ExecuteTurn(userID uint, myPokemonID uint, action string, myName string, enemyName string, enemyNo int, enemyHP int, enemyMaxHP int, enemyAtk int, enemyDef int, enemyMoveName string, enemyMoveType string, enemyMovePower int, enemyType1 string, enemyType2 string) (*BattleResult, error)
+	ExecuteTurn(userID uint, myPokemonID uint, action string, myName string, enemyName string, enemyNo int, enemyLevel int, enemyHP int, enemyMaxHP int, enemyAtk int, enemyDef int, enemyMoveName string, enemyMoveType string, enemyMovePower int, enemyType1 string, enemyType2 string) (*BattleResult, error)
 }
 
 type battleUseCase struct {
@@ -55,6 +55,10 @@ func (u *battleUseCase) StartBattle(userID uint, myPokemonID uint) (*BattleResul
 	}
 	if myPokemon.UserID != userID {
 		return nil, fmt.Errorf("unauthorized")
+	}
+
+	if myPokemon.Level < 1 {
+		myPokemon.Level = 1
 	}
 
 	// 古いデータ向けの初期化ロジック
@@ -133,7 +137,7 @@ func (u *battleUseCase) StartBattle(userID uint, myPokemonID uint) (*BattleResul
 	}, nil
 }
 
-func (u *battleUseCase) ExecuteTurn(userID uint, myPokemonID uint, action string, myName string, enemyName string, enemyNo int, enemyHP int, enemyMaxHP int, enemyAtk int, enemyDef int, enemyMoveName string, enemyMoveType string, enemyMovePower int, enemyType1 string, enemyType2 string) (*BattleResult, error) {
+func (u *battleUseCase) ExecuteTurn(userID uint, myPokemonID uint, action string, myName string, enemyName string, enemyNo int, enemyLevel int, enemyHP int, enemyMaxHP int, enemyAtk int, enemyDef int, enemyMoveName string, enemyMoveType string, enemyMovePower int, enemyType1 string, enemyType2 string) (*BattleResult, error) {
 	myPokemon, err := u.pokemonRepo.FindByID(myPokemonID)
 	if err != nil {
 		return nil, err
@@ -141,6 +145,7 @@ func (u *battleUseCase) ExecuteTurn(userID uint, myPokemonID uint, action string
 	
 	enemy := &model.Pokemon{
 		PokemonNo: enemyNo,
+		Level:     enemyLevel,
 		CurrentHP: enemyHP,
 		MaxHP:     enemyMaxHP,
 		Attack:    enemyAtk,
