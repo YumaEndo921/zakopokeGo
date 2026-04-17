@@ -18,18 +18,28 @@
     <div class="box-container">
         {{ range .PokemonList }}
         <div class="pokemon-card" id="pokemon-{{ .ID }}">
-            <h3>#{{ .ID }} {{ .Name }}</h3>
-            <img src="{{ .Image }}" alt="{{ .Name }}">
-            <div class="types">
-                {{ range .Types }}
-                <span class="type-tag">{{ . }}</span>
-                {{ end }}
+            <div class="pokemon-img-container">
+                <img src="{{ .Image }}" alt="{{ .JapaneseName }}">
+            </div>
+            <div class="pokemon-info">
+                <div class="name-level">
+                    <span class="pokemon-name">{{ .JapaneseName }}</span>
+                    <span class="pokemon-level">Lv.{{ .Level }}</span>
+                </div>
+                <div class="types">
+                    {{ range .Types }}
+                    <span class="type-tag">{{ . }}</span>
+                    {{ end }}
+                </div>
+                <div class="captured-date">
+                    捕獲日: {{ .CapturedAt.Format "2006/01/02" }}
+                </div>
             </div>
             <div class="card-actions">
                 <a href="/battle?my_pokemon_id={{ .ID }}" class="battle-btn">
                     バトル！ ⚔️
                 </a>
-                <button class="release-btn" onclick="releasePokemon('{{ .ID }}', '{{ .Name }}')">
+                <button class="release-btn" onclick="releasePokemon('{{ .ID }}', '{{ .JapaneseName }}')">
                     逃がす 👋
                 </button>
             </div>

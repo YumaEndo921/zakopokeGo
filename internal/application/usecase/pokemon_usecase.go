@@ -14,6 +14,8 @@ type CapturedPokemonDetail struct {
 	JapaneseName string
 	Image        string
 	Types        []string
+	Level        int
+	CapturedAt   time.Time
 }
 
 type PokemonUseCase interface {
@@ -103,6 +105,8 @@ func (u *pokemonUseCase) GetMyPokemons(userID uint) ([]*CapturedPokemonDetail, e
 			JapaneseName: meta.JapaneseName,
 			Image:        meta.Image,
 			Types:        meta.Types,
+			Level:        p.Level,
+			CapturedAt:   p.CapturedAt,
 		})
 	}
 	return details, nil

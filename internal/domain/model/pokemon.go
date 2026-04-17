@@ -1,5 +1,7 @@
 package model
 
+import "time"
+
 type Pokemon struct {
 	ID        uint
 	UserID    uint
@@ -15,6 +17,7 @@ type Pokemon struct {
 	MovePower int
 	Type1     string
 	Type2     string
+	CapturedAt time.Time
 }
 
 func NewPokemon(userID uint, pokemonNo int) *Pokemon {

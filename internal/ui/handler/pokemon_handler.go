@@ -88,24 +88,8 @@ func (h *PokemonHandler) Box(c *gin.Context) {
 		return
 	}
 
-	type DisplayPokemon struct {
-		ID    uint
-		Name  string
-		Image string
-		Types []string
-	}
-	var displayList []DisplayPokemon
-	for _, d := range details {
-		displayList = append(displayList, DisplayPokemon{
-			ID:    d.ID,
-			Name:  d.JapaneseName, // メインの名前として日本語名を使用
-			Image: d.Image,
-			Types: d.Types,
-		})
-	}
-
 	c.HTML(http.StatusOK, "box.html", gin.H{
-		"PokemonList": displayList,
+		"PokemonList": details,
 	})
 }
 

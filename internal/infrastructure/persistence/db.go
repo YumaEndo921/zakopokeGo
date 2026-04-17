@@ -2,6 +2,7 @@ package persistence
 
 import (
 	"log"
+	"time"
 	"zakopokeGo/internal/domain/model"
 
 	"gorm.io/driver/sqlite"
@@ -31,6 +32,7 @@ type Pokemon struct {
 	MovePower int
 	Type1     string
 	Type2     string
+	CreatedAt time.Time
 }
 
 func (u *User) ToDomain() *model.User {
@@ -67,6 +69,7 @@ func (p *Pokemon) ToDomain() *model.Pokemon {
 		MovePower: p.MovePower,
 		Type1:     p.Type1,
 		Type2:     p.Type2,
+		CapturedAt: p.CreatedAt,
 	}
 }
 
@@ -86,6 +89,7 @@ func FromDomainPokemon(p *model.Pokemon) *Pokemon {
 		MovePower: p.MovePower,
 		Type1:     p.Type1,
 		Type2:     p.Type2,
+		CreatedAt: p.CapturedAt,
 	}
 }
 

@@ -34,50 +34,96 @@ h2 {
 }
 
 .pokemon-card {
-    width: 200px;
+    width: 240px;
     background: var(--card-bg);
     backdrop-filter: blur(10px);
-    border-radius: 20px;
-    padding: 15px;
+    border-radius: 24px;
+    padding: 20px;
     text-align: center;
     box-shadow: var(--shadow);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border: 1px solid rgba(255, 255, 255, 0.4);
     position: relative;
-    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
 }
 
 .pokemon-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+    transform: translateY(-12px) scale(1.02);
+    box-shadow: 0 15px 45px rgba(0, 0, 0, 0.18);
 }
 
-.pokemon-card h3 {
-    margin: 10px 0;
-    font-size: 1.2rem;
-    color: #444;
+.pokemon-img-container {
+    width: 140px;
+    height: 140px;
+    background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0) 70%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
 }
 
 .pokemon-card img {
-    width: 120px;
-    height: 120px;
+    width: 130px;
+    height: 130px;
     object-fit: contain;
-    filter: drop-shadow(0 5px 15px rgba(0,0,0,0.1));
+    image-rendering: pixelated;
+    filter: drop-shadow(0 8px 12px rgba(0,0,0,0.15));
+}
+
+.pokemon-info {
+    width: 100%;
+}
+
+.name-level {
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.pokemon-name {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #333;
+}
+
+.pokemon-level {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #ff69b4;
+    background: #fff0f5;
+    padding: 2px 8px;
+    border-radius: 8px;
 }
 
 .pokemon-card .types {
     display: flex;
     justify-content: center;
-    gap: 5px;
-    margin-top: 5px;
+    gap: 6px;
+    margin-bottom: 8px;
 }
 
 .type-tag {
-    background: #f0f0f0;
-    padding: 2px 8px;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    padding: 3px 12px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    color: #555;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.captured-date {
+    font-size: 0.75rem;
+    color: #888;
+    background: rgba(0,0,0,0.03);
+    padding: 4px 10px;
     border-radius: 10px;
-    font-size: 0.8rem;
-    color: #666;
+    display: inline-block;
 }
 
 .release-btn {
